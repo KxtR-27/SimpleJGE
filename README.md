@@ -18,7 +18,7 @@
 <p>
     Given that pygame was made to be a game engine itself,
     I anticipate that the port to Swing will require a much different perspective.
-    Swing is not built for games outright
+    Swing is not built for games outright, but it is still good for making a low-level engine of sorts.
 </p>
 <p>
     The ultimate challenge will be to faithfully recreate some games made with simpleGE,
@@ -31,4 +31,6 @@
     including its classes, class attributes, and class methods, 
     as well as the pygame classes they extend and associate.
     For a birds-eye view, see the <a href="simpleGE.mmd">Mermaid Chart for <i><b><code>simpleGE</code></b></i></a>.
+    Alternatively, you can view this <a href="https://www.mermaidchart.com/d/f60c8348-60d4-41de-80ae-f88c111098e5" target="_blank">online version</a>
+    that is more graphically compatible, but may not be <i>quite</i> so up-to-date.
 </p>
