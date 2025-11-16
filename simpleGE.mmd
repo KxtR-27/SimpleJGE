@@ -1,0 +1,237 @@
+classDiagram
+    %% ##### Relationships #####
+
+    %% ### Inheritance ###
+    object <|-- Scene : extends
+    pygame_sprite_Sprite <|-- Sprite : extends
+    pygame_sprite_Sprite <|-- Label : extends
+    Label <|-- Button : extends
+    Button <|-- TxtInput : extends
+    Button <|-- Scroller : extends
+    pygame_sprite_Sprite <|-- MultiLabel : extends
+    object <|-- Timer : extends
+    object <|-- Sound : extends
+    %% none <|-- SpriteSheet : extends
+
+    %% ### Association ###
+    Scene --> pygame_Surface : in - screen, background
+    Scene --> pygame_sprite_Sprite : in - sprites, makeSpriteGroup()
+    Scene --> pygame_sprite_Group : in - groups, addGroup()
+    Scene --> pygame_event_Event : in doEvents(), processEvent()
+    Scene ..> Sprite : Scene has Sprites in - sprites, makeSpriteGroup() (by way of Sprite's inheritance of pygame.sprite.Sprite)
+
+    Sprite --> Scene : in - scene, \_\_init\_\_() (as a reflection of sorts)
+    Sprite --> pygame_Surface : in - screen, image, copyImage()
+    Sprite --> pygame_Color : in - colorRect(), drawTrace()
+    Sprite --> Sprite : in - collidesWith()
+
+    Label --> pygame_font_Font : in - font
+    Label --> pygame_Color : in - fgColor, bgColor
+
+    TxtInput --> pygame_Color : in - standardColor
+    TxtInput --> pygame_event_Event: in - readKeys()
+
+    MultiLabel --> pygame_font_Font : in - font
+    MultiLabel --> pygame_Color : in - fgColor, bgColor
+
+    Sound --> pygame_mixer_Sound : in - sound
+
+    SpriteSheet --> pygame_Surface : by - getCellImage()?, getNext()?
+
+
+    %% ##### Classes #####
+    namespace python {
+        class object
+    }
+
+    namespace pygame {
+        class pygame_sprite_Sprite["sprite.Sprite"]
+        class pygame_Surface["Surface"]
+        class pygame_sprite_Group["sprite.Group"]
+        class pygame_event_Event["event.Event"]
+        class pygame_Color["Color"]
+        class pygame_Rect["Rect"]
+        class pygame_font_Font["font.Font"]
+        class pygame_mixer_Sound["mixer.Sound"]
+    }
+
+    namespace simpleGE {
+        %% [pygame.sprite.Sprite] <|-- (simpleGE.Sprite)
+
+        class Scene {
+            -\_\_init\_\_()
+            screen: pygame.Surface
+            background: pygame.Surface
+            %% -Sprite sampleSprite
+            sprites: list[pygame.sprite.Sprite]
+            groups: list[pygame.sprite.Group]
+
+            start() void
+            setImage(imageFile: str, autoSize=True) void
+            stop() void
+            -__mainLoop() void
+            makeSpriteGroup(sprites: list[pygame.sprite.Sprite]) Group
+            addGroup(group: pygame.sprite.Group) void
+
+            doEvents(event: pygame.event.Event) void*
+            processEvent(event: pygame.event.Event) void*
+
+            update() void*
+            process() void*
+
+            setCaption(title: str) void
+            isKeyPressed(key: int) bool
+        }
+
+        class Sprite {
+            -\_\_init\_\_(scene: simpleGE.Scene)
+            scene: simpleGE.Scene
+            -screen: pygame.Surface
+            -screenWidth: int
+            -screenHeight: int
+
+            image: pygame.Surface
+            -rect: pygame.Rect
+
+            x: number property
+            y: number property
+
+            position: tuple[float, float] property
+            dx: number property
+            dy: number property
+            speed: number property
+            moveAngle: number property
+            imageAngle: number property
+
+            visible: bool
+            clicked: bool
+            mouseOver: bool
+            mouseDown: bool
+
+            boundAction: int
+
+            setAngle(angle: float) void
+            turnBy(angle: float) void
+            copyImage(surface: pygame.Surface) void
+            vectorFromSpeedAngle() void
+            speedAngleFromVector() void
+            forward(distance: float) void
+            addForce(amt: float, angle: float) void
+            checkClicked() void
+            update() void
+            setBoundAction(action: int) void
+            checkBounds() void
+            setSize(newX: float?, newY: float?) void
+            setImage(imageFile: str) void
+            colorRect(color: pygame.Color, size: tuple[float, float])
+            
+            -rect: pygame.rect
+            -imageMaster: ?
+
+            collidesWith(target: simpleGE.Sprite) bool
+            process() void*
+            hide() void
+            show() void
+            isKeyPressed() bool
+            distanceTo(point: tuple[float, float]) float
+            dirTo(point: tuple[float, float]) float
+            drawTrace(color: Color)
+        }
+
+        class Label {
+            \_\_init\_\_(fontName: str)
+            font: pygame.font.Font
+            text: str
+            fgColor: pygame.Color
+            bgColor: pygame.Color
+            center: tuple[float?, float?]
+            size: tuple[float?, float?]
+            clearBack: bool
+
+            update() void
+            checkEvents()*
+            process()*
+            hide() void
+            show() void
+        }
+
+        class Button {
+            \_\_init\_\_()
+            active: bool
+            clicked: bool
+
+            update() void
+        }
+
+        class TxtInput {
+            \_\_init\_\_()
+            takingInput: bool
+            activeColor: str
+            standardColor: pygame.Color
+
+            readKeys(event: pygame.event.Event) void
+        }
+
+        class Scroller {
+            \_\_init\_\_() void
+            minValue: int?
+            maxValue: int?
+            increment: int?
+            value: int?
+            format: str
+
+            update()
+        }
+
+        class MultiLabel {
+            \_\_init\_\_() void
+            textLines = list[str]
+            font: pygame.font.Font
+            fgColor: pygame.Color
+            bgColor: pygame.Color
+            center: tuple[float?, float?]
+            size: tuple[float?, float?]
+            clicked: bool
+            active: bool
+
+            update() void
+            checkEvents()*
+            process()*
+            hide() void
+            show() void
+        }
+
+        class Timer {
+            \_\_init\_\_()
+            totalTime: int?
+
+            start()
+            getElapsedTime() int?
+            getTimeLeft() int?
+        }
+
+        class Sound {
+            \_\_init\_\_(soundFile: str)
+            sound: pygame.mixer.Sound
+
+            play() void
+        }
+
+        class SpriteSheet{
+            \_\_init\_\_(imageFile: str, cellSize: tuple[int, int], numRows: int, numCols: int, delay: float)
+            offset: tuple[float?, float?]
+            imageFileName: str
+            cellSize: tuple[int, int]
+            NUMROWS: int
+            NUMCOLS: int
+            delay: float
+            animRow: int
+            animCol: int
+            timer: Timer
+            startCol: int
+            -animImage: Surface
+
+            getCellImage(row: int, col: int) Surface?
+            getNext(animRow: int) Surface?
+        }
+    }
