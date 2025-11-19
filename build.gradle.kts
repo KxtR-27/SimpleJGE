@@ -1,5 +1,7 @@
 plugins {
     id("java")
+    id("application")
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 group = "simpleJGE"
@@ -17,4 +19,13 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass.set("")
+}
+
+javafx {
+    version = "21" // LTS version
+    modules("javafx.controls")
 }
