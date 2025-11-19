@@ -22,7 +22,7 @@ tasks.test {
 }
 
 application {
-    mainClass.set("")
+    mainClass.set("HelloFX")
 }
 
 javafx {
