@@ -1,5 +1,5 @@
-<h1 role="title">SimpleJGE</h1>
-<h5 role="subtitle">Kat R. | CS 439 - Game Engine Development</h5>
+<h1>SimpleJGE</h1>
+Kat R. | CS 439 - Game Engine Development
 
 <h2>Overview</h2>
 <p>
@@ -30,7 +30,8 @@
     I have compiled an analysis on simpleGE's source code itself, 
     including its classes, class attributes, and class methods, 
     as well as the pygame classes they extend and associate.
-    For a birds-eye view, see the <a href="simpleGE.mmd">Mermaid Chart for <i><b><code>simpleGE</code></b></i></a>.
+    For a birds-eye view, see the <a href="readme/simpleGE.mmd">Mermaid Chart for <i><b><code>simpleGE</code></b></i></a>.
     Alternatively, you can view this <a href="https://www.mermaidchart.com/d/f60c8348-60d4-41de-80ae-f88c111098e5" target="_blank">online version</a>
     that is more graphically compatible, but may not be <i>quite</i> so up-to-date.
 </p>
+
