@@ -5,7 +5,7 @@
 <p>
     Both as a final project and as a personal challenge,
     this is a port of Mr. Andy Harris's <i><code>pygame</code></i> layer <a href="https://github.com/twopiharris/simpleGE" target="_blank"><i><b><code>simpleGE</code></b></i></a>
-    from <code>python</code>/<i><code>pygame</code></i> to <code>Java</code>/<code>java2D</code> (<code>AWT</code> & <code>Swing</code>).
+    from <code>python</code>/<i><code>pygame</code></i> to <code>Java</code>/<code>JavaFX</code>.
     The end goal is for the two to be as identical impossible in terms of:
 </p>
 <ul>
