@@ -19,8 +19,12 @@ import java.util.Set;
 // usage depends upon the game the user makes
 
 public abstract class Scene extends javafx.scene.Scene {
-    private final Pane screen;
+
+	/** Represents and is bound to the JavaFX root node. */
+	private final Pane screen;
+	/** Represents and is bound to the screen's children. */
 	private final List<Node> nodes;
+	/** A private inner class object that handles pressed keys for the Scene. */
 	private final KeyManager keyManager;
 
 	/**
@@ -50,26 +54,45 @@ public abstract class Scene extends javafx.scene.Scene {
 		};
 	}
 
-    public Scene(double width, double height) {
-        super(new Pane(), width, height);
+	/**
+	 * @param width The width of the application window in pixels
+	 * @param height The height of the application window in pixels
+	 */
+	public Scene(double width, double height) {
+		super(new Pane(), width, height);
 
-        screen = (Pane) this.getRoot();
+		screen = (Pane) this.getRoot();
 		fillBackground(Color.WHITE);
 
 		nodes = screen.getChildren();
 
 		keyManager = new KeyManager(this);
-    }
+	}
 
+	/**
+	 * Constructs a Scene with a default width of 640 pixels
+	 * and a default height of 480 pixels
+	 */
 	public Scene() {
 		this(640, 480);
 	}
 
 
-    public void fillBackground(Color color) {
+	/**
+	 * Displays a solid {@link Color} across the entire background.
+	 *
+	 * @param color The color of the background
+	 */
+	public void fillBackground(Color color) {
 		screen.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-    }
+	}
 
+	/**
+	 * Displays an {@link ImageView} across the background.
+	 *
+	 * @param imagePathName The qualified filename of the image
+	 * @param preserveRatio If true, image will resize to fit the window automatically
+	 */
 	public void setImage(String imagePathName, boolean preserveRatio) {
 		ImageView image = new ImageView(imagePathName);
 
@@ -78,19 +101,40 @@ public abstract class Scene extends javafx.scene.Scene {
 		image.setPreserveRatio(preserveRatio);
 	}
 
+	/**
+	 * Displays an {@link ImageView} across the background.
+	 * The image will resize to fit the window automatically.
+	 *
+	 * @param imagePathName The qualified filename of the image
+	 */
 	public void setImage(String imagePathName) {
 		setImage(imagePathName, true);
 	}
 
 
+	/**
+	 * Adds passed nodes to the scene.
+	 *
+	 * @param nodes JavaFX {@link Node}(s) to add to the scene
+	 */
 	public void addNodes(Node... nodes) {
 		this.nodes.addAll(List.of(nodes));
 	}
 
+	/**
+	 * Adds a single node to the scene.
+	 *
+	 * @param node JavaFX {@link Node} to add to the scene
+	 */
 	public void addNode(Node node) {
 		addNodes(node);
 	}
 
+	/**
+	 * Adds a group of nodes to the scene.
+	 *
+	 * @param group JavaFX {@link Group} of JavaFX {@link Node}(s) to add to the scene.
+	 */
 	public void addGroup(Group group) {
 		addNode(group);
 	}
@@ -105,20 +149,44 @@ public abstract class Scene extends javafx.scene.Scene {
 	public abstract void process();
 
 
+	/**
+	 * Sets the application window title
+	 *
+	 * @param stage The {@link Stage of your application}
+	 * @param title The string for the application window title
+	 */
 	// To consolidate most of the complexities to a place unseen to the user,
 	// simply passing a stage *in* means they need not worry about what a stage *is*
 	public void setCaption(Stage stage, String title) {
 		stage.setTitle(title);
 	}
 
+	/**
+	 * Checks whether a keyboard key is held down by its corresponding {@link KeyCode}
+	 *
+	 * @param keyCode identifier for the queried key
+	 *
+	 * @return true if the key is being held down;
+	 * false if the key is not pressed
+	 */
 	public boolean isKeyPressed(KeyCode keyCode) {
 		return keyManager.isKeyPressed(keyCode);
 	}
 
-
+	/**
+	 * Injects keyboard listeners into its parent {@link Scene}.
+	 * In doing so, it provides the ability for a key to be
+	 * held continuously without spamming inputs.
+	 */
 	private static class KeyManager {
+		/**
+		 * The Set of keys that are currently being held down
+		 */
 		private final Set<KeyCode> pressedKeys;
 
+		/**
+		 * @param parent The parent into which to inject the key listeners
+		 */
 		private KeyManager(Scene parent) {
 			pressedKeys = new HashSet<>();
 			parent.setOnKeyPressed(keyEvent -> {
@@ -134,6 +202,12 @@ public abstract class Scene extends javafx.scene.Scene {
 			});
 		}
 
+		/** Checks whether a keyboard key is held down by its corresponding {@link KeyCode}
+		 * @param keyCode identifier for the queried key
+		 *
+		 * @return true if the key is currently held down;
+		 * false if the key is not pressed
+		 */
 		private boolean isKeyPressed(KeyCode keyCode) {
 			return pressedKeys.contains(keyCode);
 		}
