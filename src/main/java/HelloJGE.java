@@ -12,11 +12,17 @@ public class HelloJGE extends Application {
         label.setFGColor(Color.RED);
         label.setCenter(100, 100);
 
+		// `getResource()` function navigates Gradle structure to the corresponding resources folder
+		//noinspection DataFlowIssue - purely for testing purposes. if it returns null, I intend it.
+		String image = HelloJGE.class.getResource("simpleJGE/imageview-test.jpg").toString();
+
 		// You don't have to add package prefix,
 		// but it explicitly specifies which "Scene" to use here.
 		// Readability is key ✨
-        simpleJGE.Scene scene = new Scene(640, 480);
-		scene.fillBackground(Color.DARKRED);
+        simpleJGE.Scene scene = Scene.newBasicScene();
+		scene.setImage(image);
+		scene.addNodes(label);
+		scene.setCaption(stage, "test");
 
         stage.setScene(scene);
         stage.show();
