@@ -7,12 +7,16 @@ import simpleJGE.Scene;
 public class HelloJGE extends Application {
     @Override
     public void start(Stage stage) {
-        Label label = new Label();
+        simpleJGE.Label label = new Label();
         label.setText("Hello world!");
         label.setFGColor(Color.RED);
         label.setCenter(100, 100);
 
-        Scene scene = new Scene(label);
+		// You don't have to add package prefix,
+		// but it explicitly specifies which "Scene" to use here.
+		// Readability is key ✨
+        simpleJGE.Scene scene = new Scene(640, 480);
+		scene.fillBackground(Color.DARKRED);
 
         stage.setScene(scene);
         stage.show();

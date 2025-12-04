@@ -1,24 +1,30 @@
 package simpleJGE;
 
-import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 @SuppressWarnings("unused")
 // usage depends upon the game the user makes
+
 public class Scene extends javafx.scene.Scene {
     @SuppressWarnings("FieldCanBeLocal")
     // Further implementation will use the window
-    private final Pane window = new Pane();
+    private final Pane screen;
+	private final Background background;
 
-    public Scene(Parent parent, double v, double v1) {
-        super(parent, v, v1);
+    public Scene(double width, double height) {
+        super(new Pane(), width, height);
+        screen = (Pane) this.getRoot();
+
+		if (screen.getBackground() == null)
+			screen.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+
+		background = screen.getBackground();
     }
 
-    public Scene(Node... nodes) {
-        super(new Pane(/* arbitrary */), 640, 480);
-        this.setRoot(window);
-
-        window.getChildren().addAll(nodes);
+    public void fillBackground(Color color) {
+		screen.setBackground(new Background(new BackgroundFill(color, null, null)));
     }
 }
