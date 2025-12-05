@@ -12,17 +12,17 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import simpleJGE.interfaces.ClickableNode;
+import simpleJGE.abstracts.ClickableNode;
+import simpleJGE.abstracts.ProcessableNode;
 
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Sprite implements ClickableNode {
+public abstract class Sprite extends ProcessableNode implements ClickableNode {
 	// intentionally package-private
 	private final Pane fxPane;
 	private final Scene scene;
 
-	@Override
 	public Node fxNode() {
 		return fxPane;
 	}

@@ -1,4 +1,4 @@
-package simpleJGE.interfaces;
+package simpleJGE.abstracts;
 
 @SuppressWarnings("unused")
 // This warning is incorrect.

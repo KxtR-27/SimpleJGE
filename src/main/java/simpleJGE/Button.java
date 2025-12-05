@@ -2,7 +2,8 @@ package simpleJGE;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import simpleJGE.interfaces.ClickableNode;
+import simpleJGE.abstracts.ClickableNode;
+import simpleJGE.abstracts.LabeledFXNode;
 
 @SuppressWarnings("unused")
 // usage depends upon user implementation

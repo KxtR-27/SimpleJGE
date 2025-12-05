@@ -1,4 +1,4 @@
-package simpleJGE.interfaces;
+package simpleJGE.abstracts;
 
 import javafx.scene.paint.Color;
 
@@ -6,10 +6,8 @@ import javafx.scene.paint.Color;
 // This warning is incorrect.
 // at time of writing, this has 6 implementations.
 
-public interface Labeled extends ProcessableNode {
+public interface Labeled {
 	void setFont(String fontName);
-
-	void setText(String text);
 
 	void setFGColor(Color fgColor);
 

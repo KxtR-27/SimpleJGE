@@ -1,26 +1,25 @@
-package simpleJGE;
+package simpleJGE.abstracts;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import simpleJGE.interfaces.Labeled;
 
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class LabeledFXNode implements Labeled {
+public abstract class LabeledFXNode extends ProcessableNode implements Labeled {
 	private final javafx.scene.control.Labeled fxLabeled;
 
 	private Color bgColor = Color.WHITE;
-	private boolean clearBack = false;
+	protected boolean clearBack = false;
 
-	LabeledFXNode(String fontName, javafx.scene.control.Labeled fxLabeled) {
+	public LabeledFXNode(String fontName, javafx.scene.control.Labeled fxLabeled) {
 		this.fxLabeled = fxLabeled;
 		fxLabeled.setFont(new Font(fontName, 16));
 	}
 
-	LabeledFXNode(javafx.scene.control.Labeled fxLabeled) {
+	public LabeledFXNode(javafx.scene.control.Labeled fxLabeled) {
 		this.fxLabeled = fxLabeled;
 	}
 
@@ -43,10 +42,6 @@ public abstract class LabeledFXNode implements Labeled {
 	public void setBGColor(Color bgColor) {
 		this.bgColor = bgColor;
 		updateBackground();
-	}
-
-	public void setCenter(double x, double y) {
-		fxLabeled.relocate(x, y);
 	}
 
 	public void setSize(double fontSize) {
@@ -74,12 +69,4 @@ public abstract class LabeledFXNode implements Labeled {
 	// checkEvents() is redundant, as JavaFX actively listens for events
 
 	public abstract void process();
-
-	public void hide() {
-		fxLabeled.setVisible(false);
-	}
-
-	public void show() {
-		fxLabeled.setVisible(true);
-	}
 }

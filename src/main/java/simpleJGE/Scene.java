@@ -10,8 +10,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import simpleJGE.interfaces.ProcessableNode;
-import simpleJGE.interfaces.ProcessableScene;
+import simpleJGE.abstracts.ProcessableNode;
+import simpleJGE.abstracts.ProcessableScene;
 
 import java.util.HashSet;
 import java.util.List;

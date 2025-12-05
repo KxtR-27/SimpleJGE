@@ -1,0 +1,2 @@
+Known Bugs:
+- Scroller object cannot have clear background
