@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import simpleJGE.*;
 
+import java.util.List;
 import java.util.Objects;
 
 public class HelloJGE extends Application {
@@ -41,6 +42,18 @@ public class HelloJGE extends Application {
 		scroller.setBGColor(Color.CHARTREUSE);
 		scroller.setFont("Times New Roman");
 
+		simpleJGE.MultiLabel multiLabel = MultiLabel.newBasicMultiLabel(List.of(
+				"I have many lines",
+				"and I must share them all",
+				"something, something...uhh..",
+				"yeah that's all I got."
+		));
+		multiLabel.addLines("actually wait I forgot this one");
+		multiLabel.setCenter(150, 150);
+		multiLabel.setSize(18);
+		multiLabel.setClearBack(false);
+		multiLabel.setBGColor(Color.CADETBLUE);
+
 		simpleJGE.Button button = Button.newBasicButton();
 		button.setText("I'm a button!");
 		button.setFGColor(Color.WHITE);
@@ -50,6 +63,7 @@ public class HelloJGE extends Application {
 		button.setOnClick(event -> {
 			input.setClearBack(true);
 			scroller.setClearBack(true);
+			multiLabel.setClearBack(true);
 		});
 		button.setFont("Times New Roman");
 
@@ -60,7 +74,7 @@ public class HelloJGE extends Application {
 		// but it explicitly specifies which "Scene" to use here.
 		// Readability is key ✨
 		scene.setImage(bgImage);
-		scene.addNodes(label, sprite, imageSprite, button, input, scroller);
+		scene.addNodes(label, sprite, imageSprite, button, input, scroller, multiLabel);
 		scene.setCaption(stage, "test");
 
         stage.setScene(scene.forStage());
