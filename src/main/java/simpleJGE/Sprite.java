@@ -19,6 +19,7 @@ abstract class Sprite {
 
 	// shorthand to get pane layout x
 	private double getX() {return fxPane.getLayoutX();}
+
 	// shorthand to set pane layout x
 	private void setX(double x) {fxPane.setLayoutX(x);}
 
@@ -35,7 +36,19 @@ abstract class Sprite {
 
 	private Point2D previousPoint;
 	private BoundaryAction boundaryAction = BoundaryAction.WRAP;
-	
+
+	/**
+	 * @return an anonymous {@link Scene} subclass that has
+	 * no implementation for {@link #process()}.
+	 * Intended only for basic developmentary tests.
+	 */
+	public static Sprite newBasicSprite(Scene scene) {
+		return new Sprite(scene) {
+			@Override
+			public void process() {}
+		};
+	}
+
 	Sprite(Scene scene) {
 		super();
 		this.fxPane = new Pane();
@@ -47,7 +60,6 @@ abstract class Sprite {
 
 		this.previousPoint = this.getPoint();
 	}
-
 
 	public void setAngle(double angleDeg) {
 		fxPane.setRotate(angleDeg);
@@ -112,7 +124,7 @@ abstract class Sprite {
 		setY(getY() + dy);
 		checkBounds();
 		// center myself
-//		checkClicked();
+		//		checkClicked();
 		this.process();
 	}
 
