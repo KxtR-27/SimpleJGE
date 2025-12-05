@@ -13,17 +13,18 @@ import javafx.scene.shape.Line;
 // usage depends upon user implementation
 
 abstract class Sprite {
-	private final Pane pane;
+	// intentionally package-private
+	final Pane fxPane;
 	private final Scene scene;
 
 	// shorthand to get pane layout x
-	private double getX() {return pane.getLayoutX();}
+	private double getX() {return fxPane.getLayoutX();}
 	// shorthand to set pane layout x
-	private void setX(double x) {pane.setLayoutX(x);}
+	private void setX(double x) {fxPane.setLayoutX(x);}
 
-	private double getY() {return pane.getLayoutY();}
+	private double getY() {return fxPane.getLayoutY();}
 
-	private void setY(double y) {pane.setLayoutY(y);}
+	private void setY(double y) {fxPane.setLayoutY(y);}
 
 	private Point2D getPoint() {return new Point2D(getX(), getY());}
 
@@ -37,28 +38,28 @@ abstract class Sprite {
 	
 	Sprite(Scene scene) {
 		super();
-		this.pane = new Pane();
-		this.pane.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
+		this.fxPane = new Pane();
+		this.fxPane.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
 		this.setSize(25, 25);
 
 		this.scene = scene;
-		scene.addNode(pane);
+		scene.addNode(fxPane);
 
 		this.previousPoint = this.getPoint();
 	}
 
 
 	public void setAngle(double angleDeg) {
-		pane.setRotate(angleDeg);
+		fxPane.setRotate(angleDeg);
 	}
 
 	public void turnBy(double angleDeg) {
-		pane.setRotate(pane.getRotate() + angleDeg);
+		fxPane.setRotate(fxPane.getRotate() + angleDeg);
 	}
 
 	public void copyImage(String imageFilename) {
-		pane.getChildren().clear();
-		pane.getChildren().add(new ImageView(imageFilename));
+		fxPane.getChildren().clear();
+		fxPane.getChildren().add(new ImageView(imageFilename));
 	}
 
 	/** Calculates and sets {@link #dx} and {@link #dy} from {@link #speed} and {@link #moveAngle} */
@@ -81,7 +82,7 @@ abstract class Sprite {
 		double dx = this.dx;
 
 		double radians = Math.atan2(dy, dx);
-		pane.setRotate(radians / Math.PI * 180);
+		fxPane.setRotate(radians / Math.PI * 180);
 	}
 
 	public void forward(double distance) {
@@ -89,8 +90,8 @@ abstract class Sprite {
 		double dx = Math.cos(theta) * distance;
 		double dy = Math.sin(theta) * distance * -1;
 
-		pane.setLayoutX(pane.getLayoutX() + dx);
-		pane.setLayoutY(pane.getLayoutY() + dy);
+		fxPane.setLayoutX(fxPane.getLayoutX() + dx);
+		fxPane.setLayoutY(fxPane.getLayoutY() + dy);
 	}
 
 	public void addForce(double amt, double angle) {
@@ -120,7 +121,7 @@ abstract class Sprite {
 	}
 
 	public void checkBounds() {
-		if (!pane.isVisible())
+		if (!fxPane.isVisible())
 			return;
 
 		double screenW = scene.getWidth();
@@ -162,25 +163,25 @@ abstract class Sprite {
 	}
 
 	public void setSize(double newW, double newH) {
-		pane.setPrefWidth(newW);
-		pane.setPrefHeight(newH);
+		fxPane.setPrefWidth(newW);
+		fxPane.setPrefHeight(newH);
 	}
 
 	// probably an actual sprite thing
 	//	public void setImage(String imageFilename);
 
 	public boolean collidesWith(Sprite target) {
-		return pane.intersects(target.pane.getLayoutBounds());
+		return fxPane.intersects(target.fxPane.getLayoutBounds());
 	}
 
 	public abstract void process();
 
 	public void hide() {
-		pane.setVisible(false);
+		fxPane.setVisible(false);
 	}
 
 	public void show() {
-		pane.setVisible(true);
+		fxPane.setVisible(true);
 	}
 
 	public boolean isKeyPressed(KeyCode keyCode) {

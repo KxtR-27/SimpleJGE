@@ -20,8 +20,9 @@ import java.util.Set;
 
 public abstract class Scene {
 
-	/** The scene passed to the JavaFX {@link Stage} */
-	private final javafx.scene.Scene fxScene;
+	/** The scene passed to the JavaFX {@link Stage}
+	 * intentionally package-private */
+	final javafx.scene.Scene fxScene;
 	/** Represents and is bound to the fxScene's root node. */
 	private final Pane screen;
 	/** Represents and is bound to the screen's children. */
@@ -131,8 +132,18 @@ public abstract class Scene {
 	 *
 	 * @param nodes JavaFX {@link Node}(s) to add to the scene
 	 */
-	public void addNodes(Node... nodes) {
-		this.nodes.addAll(List.of(nodes));
+	public void addNodes(Object... nodes) {
+		for (Object nodeObj : nodes) {
+			switch (nodeObj) {
+				case Node node -> this.nodes.add(node);
+				case Sprite sprite -> this.nodes.add(sprite.fxPane);
+				case Label label -> this.nodes.add(label.fxLabel);
+
+				case null, default -> throw new IllegalArgumentException(
+						"Node must be javafx.scene.Node, simpleJGE.Sprite, or simpleJGE.Label."
+				);
+			}
+		}
 	}
 
 	/**
