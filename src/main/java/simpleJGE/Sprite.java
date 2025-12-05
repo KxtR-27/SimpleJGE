@@ -12,13 +12,14 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import simpleJGE.interfaces.ClickableNode;
 
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Sprite implements ProcessableNode {
+public abstract class Sprite implements ClickableNode {
 	// intentionally package-private
-	final Pane fxPane;
+	private final Pane fxPane;
 	private final Scene scene;
 
 	@Override
@@ -38,17 +39,18 @@ public abstract class Sprite implements ProcessableNode {
 
 	public void setPoint(Point2D point) {fxPane.relocate(point.getX(), point.getY());}
 
-	protected double dx = 0.0, dy = 0.0;	// 2D velocity direction
-	protected double speed = 0.0;			// 2D velocity speed
-	protected double moveAngle = 0.0;		// used for movement direction
-	protected double imageAngle = 0.0;		// used for pane rotation
+	protected double dx = 0.0, dy = 0.0;    // 2D velocity direction
+	protected double speed = 0.0;            // 2D velocity speed
+	protected double moveAngle = 0.0;        // used for movement direction
+	protected double imageAngle = 0.0;        // used for pane rotation
 
 	protected BoundaryAction boundaryAction = BoundaryAction.WRAP;
 	private Point2D previousPoint;
 
 	/**
 	 * @return an anonymous {@link Sprite} subclass that has
-	 * no implementation for {@link #process()}.
+	 * no implementation for {@link #process()}
+	 * and a print statement for {@link #setOnClick(EventHandler)}.
 	 * Intended only for basic developmentary tests.
 	 */
 	public static Sprite newBasicSprite(Scene scene) {
@@ -56,7 +58,7 @@ public abstract class Sprite implements ProcessableNode {
 			@Override
 			public void process() {}
 		};
-		sprite.setOnClick(keyEvent -> System.out.printf("I was clicked!%n"));
+		sprite.setOnClick(keyEvent -> System.out.printf("I, a sprite, was clicked!%n"));
 		return sprite;
 	}
 
@@ -123,6 +125,7 @@ public abstract class Sprite implements ProcessableNode {
 		dy += ddy;
 	}
 
+	@Override
 	public void setOnClick(EventHandler<? super MouseEvent> eventHandler) {
 		fxPane.setOnMouseClicked(eventHandler);
 	}

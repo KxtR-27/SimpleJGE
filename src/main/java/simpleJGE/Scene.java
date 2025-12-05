@@ -10,6 +10,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import simpleJGE.interfaces.ProcessableNode;
+import simpleJGE.interfaces.ProcessableScene;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,8 +22,10 @@ import java.util.Set;
 
 public abstract class Scene implements ProcessableScene {
 
-	/** The scene passed to the JavaFX {@link Stage}
-	 * intentionally package-private */
+	/**
+	 * The scene passed to the JavaFX {@link Stage}
+	 * intentionally package-private
+	 */
 	final javafx.scene.Scene fxScene;
 	/** Represents and is bound to the fxScene's root node. */
 	private final Pane screen;
@@ -89,14 +93,13 @@ public abstract class Scene implements ProcessableScene {
 		return fxScene;
 	}
 
-
 	public double getWidth() {
 		return fxScene.getWidth();
 	}
+
 	public double getHeight() {
 		return fxScene.getHeight();
 	}
-
 
 	/**
 	 * Displays a solid {@link Color} across the entire background.
@@ -131,52 +134,50 @@ public abstract class Scene implements ProcessableScene {
 		setImage(imagePathName, true);
 	}
 
+	/**
+	 * Adds passed nodes to the scene.
+	 *
+	 * @param pNodes SimpleJGE {@link ProcessableNode}(s) to add to the scene
+	 */
+	public void addNodes(ProcessableNode... pNodes) {
+		List.of(pNodes).forEach(pNode -> this.nodes.add(pNode.fxNode()));
+	}
 
 	/**
 	 * Adds passed nodes to the scene.
 	 *
-	 * @param nodes JavaFX {@link Node}(s) to add to the scene
+	 * @param fxNodes JavaFX {@link Node}(s) to add to the scene
 	 */
-	public void addNodes(Object... nodes) {
-		for (Object nodeObj : nodes) {
-			switch (nodeObj) {
-				case Node node -> {
-					if (!this.nodes.contains(node))
-						this.nodes.add(node);
-				}
-				case Sprite sprite -> {
-					if (!this.nodes.contains(sprite.fxPane))
-						this.nodes.add(sprite.fxPane);
-				}
-				case Label label -> {
-					if (!this.nodes.contains(label.fxLabel))
-						this.nodes.add(label.fxLabel);}
-
-				case null, default -> throw new IllegalArgumentException(
-						"Node must be javafx.scene.Node, simpleJGE.Sprite, or simpleJGE.Label."
-				);
-			}
-		}
+	public void addNodes(javafx.scene.Node... fxNodes) {
+		this.nodes.addAll(List.of(fxNodes));
 	}
 
 	/**
 	 * Adds a single node to the scene.
 	 *
-	 * @param node JavaFX {@link Node} to add to the scene
+	 * @param pNode SimpleJGE {@link ProcessableNode} to add to the scene
 	 */
-	public void addNode(Node node) {
-		addNodes(node);
+	public void addNode(ProcessableNode pNode) {
+		addNodes(pNode);
+	}
+
+	/**
+	 * Adds a single node to the scene.
+	 *
+	 * @param fxNode SimpleJGE {@link Node} to add to the scene
+	 */
+	public void addNode(javafx.scene.Node fxNode) {
+		addNodes(fxNode);
 	}
 
 	/**
 	 * Adds a group of nodes to the scene.
 	 *
-	 * @param group JavaFX {@link Group} of JavaFX {@link Node}(s) to add to the scene.
+	 * @param fxGroup JavaFX {@link Group} of JavaFX {@link Node}(s) to add to the scene.
 	 */
-	public void addGroup(Group group) {
-		addNode(group);
+	public void addGroup(javafx.scene.Group fxGroup) {
+		this.nodes.add(fxGroup);
 	}
-
 
 	public abstract void doEvents(Event event);
 
@@ -185,7 +186,6 @@ public abstract class Scene implements ProcessableScene {
 	public abstract void update();
 
 	public abstract void process();
-
 
 	/**
 	 * Sets the application window title
@@ -240,7 +240,9 @@ public abstract class Scene implements ProcessableScene {
 			});
 		}
 
-		/** Checks whether a keyboard key is held down by its corresponding {@link KeyCode}
+		/**
+		 * Checks whether a keyboard key is held down by its corresponding {@link KeyCode}
+		 *
 		 * @param keyCode identifier for the queried key
 		 *
 		 * @return true if the key is currently held down;
