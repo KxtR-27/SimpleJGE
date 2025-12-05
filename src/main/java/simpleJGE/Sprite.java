@@ -1,4 +1,218 @@
 package simpleJGE;
 
-public class Sprite {
+import javafx.geometry.Point2D;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+
+@SuppressWarnings("unused")
+// usage depends upon user implementation
+
+abstract class Sprite {
+	private final Pane pane;
+	private final Scene scene;
+
+	// shorthand to get pane layout x
+	private double getX() {return pane.getLayoutX();}
+	// shorthand to set pane layout x
+	private void setX(double x) {pane.setLayoutX(x);}
+
+	private double getY() {return pane.getLayoutY();}
+
+	private void setY(double y) {pane.setLayoutY(y);}
+
+	private Point2D getPoint() {return new Point2D(getX(), getY());}
+
+	private double dx = 0.0, dy = 0.0;    // 2D velocity
+	private double speed = 0.0;            // 2D vel. speed
+	private double moveAngle = 0.0;        // used for movement direction
+	private double imageAngle = 0.0;    // used for pane rotation
+
+	private Point2D previousPoint;
+	private BoundaryAction boundaryAction = BoundaryAction.WRAP;
+	
+	Sprite(Scene scene) {
+		super();
+		this.pane = new Pane();
+		this.pane.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
+		this.setSize(25, 25);
+
+		this.scene = scene;
+		scene.addNode(pane);
+
+		this.previousPoint = this.getPoint();
+	}
+
+
+	public void setAngle(double angleDeg) {
+		pane.setRotate(angleDeg);
+	}
+
+	public void turnBy(double angleDeg) {
+		pane.setRotate(pane.getRotate() + angleDeg);
+	}
+
+	public void copyImage(String imageFilename) {
+		pane.getChildren().clear();
+		pane.getChildren().add(new ImageView(imageFilename));
+	}
+
+	/** Calculates and sets {@link #dx} and {@link #dy} from {@link #speed} and {@link #moveAngle} */
+	private void vectorFromSpeedAngle() {
+		double theta = moveAngle / 180.0 * Math.PI;
+		double normalizedDX = Math.cos(theta);
+		double normalizedDY = Math.sin(theta);
+		dx = normalizedDX * speed;
+		dy = normalizedDY * speed;
+	}
+
+	/**
+	 * Calculates and sets {@link #moveAngle} from {@link #dx} and {@link #dy}
+	 * Might actually not be used???
+	 */
+	private void speedAngleFromVector() {
+		speed = Math.hypot(dx, dy);
+
+		double dy = this.dy * -1;
+		double dx = this.dx;
+
+		double radians = Math.atan2(dy, dx);
+		pane.setRotate(radians / Math.PI * 180);
+	}
+
+	public void forward(double distance) {
+		double theta = imageAngle / 180.0 * Math.PI;
+		double dx = Math.cos(theta) * distance;
+		double dy = Math.sin(theta) * distance * -1;
+
+		pane.setLayoutX(pane.getLayoutX() + dx);
+		pane.setLayoutY(pane.getLayoutY() + dy);
+	}
+
+	public void addForce(double amt, double angle) {
+		double radians = angle * Math.PI / 180;
+		double ddx = amt * Math.cos(radians);
+		double ddy = amt * Math.sin(radians) * -1;
+
+		dx += ddx;
+		dy += ddy;
+	}
+
+
+	// can likely be replaced with an event handler itself | private void checkClicked();
+
+	public void update() {
+		previousPoint = getPoint();
+		setX(getX() + dx);
+		setY(getY() + dy);
+		checkBounds();
+		// center myself
+//		checkClicked();
+		this.process();
+	}
+
+	public void setBoundaryAction(BoundaryAction action) {
+		boundaryAction = action;
+	}
+
+	public void checkBounds() {
+		if (!pane.isVisible())
+			return;
+
+		double screenW = scene.getWidth();
+		double screenH = scene.getHeight();
+
+		boolean offRight = getX() > screenW;
+		boolean offLeft = getX() < 0;
+		boolean offBottom = getY() > screenH;
+		boolean offTop = getY() < 0;
+		boolean offScreen = offRight
+				|| offLeft
+				|| offBottom
+				|| offTop;
+
+		if (!offScreen)
+			return;
+
+		switch (boundaryAction) {
+			case BoundaryAction.WRAP -> {
+				if (offRight)
+					setX(0);
+				if (offLeft)
+					setX(screenW);
+				if (offBottom)
+					setY(0);
+				if (offTop)
+					setY(screenH);
+			}
+			case BoundaryAction.BOUNCE -> {
+				if (offRight || offLeft)
+					dx *= -1;
+				if (offBottom || offTop)
+					dy *= -1;
+			}
+			case BoundaryAction.STOP -> speed = 0;
+			case BoundaryAction.HIDE -> hide();
+			case BoundaryAction.CONTINUE -> {}
+		}
+	}
+
+	public void setSize(double newW, double newH) {
+		pane.setPrefWidth(newW);
+		pane.setPrefHeight(newH);
+	}
+
+	// probably an actual sprite thing
+	//	public void setImage(String imageFilename);
+
+	public boolean collidesWith(Sprite target) {
+		return pane.intersects(target.pane.getLayoutBounds());
+	}
+
+	public abstract void process();
+
+	public void hide() {
+		pane.setVisible(false);
+	}
+
+	public void show() {
+		pane.setVisible(true);
+	}
+
+	public boolean isKeyPressed(KeyCode keyCode) {
+		return scene.isKeyPressed(keyCode);
+	}
+
+	public double distanceTo(Point2D point) {
+		return getPoint().distance(point);
+	}
+
+	public double distanceTo(double x, double y) {
+		return distanceTo(new Point2D(x, y));
+	}
+
+	public double dirTo(Point2D point) {
+		return getPoint().angle(point);
+	}
+
+	public void drawTrace(Color color) {
+		Line trace = new Line(
+				getX(), getY(),
+				previousPoint.getX(), previousPoint.getY()
+		);
+		trace.setFill(color);
+		scene.addNode(trace);
+	}
+
+	public void drawTrace() {
+		drawTrace(Color.BLACK);
+	}
+
+	public enum BoundaryAction {
+		WRAP, BOUNCE, STOP, HIDE, CONTINUE
+	}
 }

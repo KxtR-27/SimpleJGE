@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-// usage depends upon the game the user makes
+// usage depends upon user implementation
 
 public abstract class Scene extends javafx.scene.Scene {
 

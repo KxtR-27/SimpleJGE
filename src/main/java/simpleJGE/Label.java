@@ -6,7 +6,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 @SuppressWarnings("unused")
-// usage depends upon the game the user makes
+// usage depends upon user implementation
+
 public class Label extends javafx.scene.control.Label {
     // pygame           <--- simpleGE  ---> javafx
 
