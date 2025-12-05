@@ -24,7 +24,7 @@ public class HelloJGE extends Application {
 		scene.addNodes(label);
 		scene.setCaption(stage, "test");
 
-        stage.setScene(scene);
+        stage.setScene(scene.forStage());
         stage.show();
     }
 }

@@ -18,9 +18,11 @@ import java.util.Set;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Scene extends javafx.scene.Scene {
+public abstract class Scene {
 
-	/** Represents and is bound to the JavaFX root node. */
+	/** The scene passed to the JavaFX {@link Stage} */
+	private final javafx.scene.Scene fxScene;
+	/** Represents and is bound to the fxScene's root node. */
 	private final Pane screen;
 	/** Represents and is bound to the screen's children. */
 	private final List<Node> nodes;
@@ -59,14 +61,14 @@ public abstract class Scene extends javafx.scene.Scene {
 	 * @param height The height of the application window in pixels
 	 */
 	public Scene(double width, double height) {
-		super(new Pane(), width, height);
+		fxScene = new javafx.scene.Scene(new Pane(), width, height);
 
-		screen = (Pane) this.getRoot();
+		screen = (Pane) fxScene.getRoot();
 		fillBackground(Color.WHITE);
 
 		nodes = screen.getChildren();
 
-		keyManager = new KeyManager(this);
+		keyManager = new KeyManager(this.fxScene);
 	}
 
 	/**
@@ -75,6 +77,18 @@ public abstract class Scene extends javafx.scene.Scene {
 	 */
 	public Scene() {
 		this(640, 480);
+	}
+
+	public javafx.scene.Scene forStage() {
+		return fxScene;
+	}
+
+
+	public double getWidth() {
+		return fxScene.getWidth();
+	}
+	public double getHeight() {
+		return fxScene.getHeight();
 	}
 
 
@@ -187,7 +201,7 @@ public abstract class Scene extends javafx.scene.Scene {
 		/**
 		 * @param parent The parent into which to inject the key listeners
 		 */
-		private KeyManager(Scene parent) {
+		private KeyManager(javafx.scene.Scene parent) {
 			pressedKeys = new HashSet<>();
 			parent.setOnKeyPressed(keyEvent -> {
 				if (pressedKeys.contains(keyEvent.getCode()))
