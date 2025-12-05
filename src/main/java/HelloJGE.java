@@ -2,10 +2,7 @@ import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import simpleJGE.Button;
-import simpleJGE.Label;
-import simpleJGE.Scene;
-import simpleJGE.Sprite;
+import simpleJGE.*;
 
 import java.util.Objects;
 
@@ -30,12 +27,17 @@ public class HelloJGE extends Application {
 		simpleJGE.Sprite sprite = Sprite.newBasicSprite(scene);
 		sprite.setOnClick(event -> imageSprite.setSize(50, 50));
 
+		simpleJGE.TxtInput input = new TxtInput();
+		input.setFGColor(Color.RED);
+		input.setBGColor(Color.BLACK);
+
 		simpleJGE.Button button = Button.newBasicButton();
 		button.setText("I'm a button!");
 		button.setFGColor(Color.WHITE);
 		button.setCenter(50, 50);
 		button.setBGColor(Color.DARKBLUE);
 		button.setClearBack(false);
+		button.setOnClick(event -> input.setClearBack(true));
 
 		// `getResource()` function navigates Gradle structure to the corresponding resources folder
 		String bgImage = helpGetResource("imageview-test.jpg");
@@ -44,7 +46,7 @@ public class HelloJGE extends Application {
 		// but it explicitly specifies which "Scene" to use here.
 		// Readability is key ✨
 		scene.setImage(bgImage);
-		scene.addNodes(label, sprite, imageSprite, button);
+		scene.addNodes(label, sprite, imageSprite, button, input);
 		scene.setCaption(stage, "test");
 
         stage.setScene(scene.forStage());

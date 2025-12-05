@@ -7,7 +7,7 @@ import simpleJGE.interfaces.ClickableNode;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Button extends Labeled implements ClickableNode {
+public abstract class Button extends LabeledFXNode implements ClickableNode {
 	/**
 	 * @return an anonymous {@link Button} subclass that has
 	 * no implementation for {@link #process()}.

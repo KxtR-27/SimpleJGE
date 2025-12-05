@@ -4,23 +4,23 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import simpleJGE.interfaces.ProcessableNode;
+import simpleJGE.interfaces.Labeled;
 
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-abstract class Labeled implements ProcessableNode {
+public abstract class LabeledFXNode implements Labeled {
 	private final javafx.scene.control.Labeled fxLabeled;
 
 	private Color bgColor = Color.WHITE;
 	private boolean clearBack = false;
 
-	Labeled(String fontName, javafx.scene.control.Labeled fxLabeled) {
+	LabeledFXNode(String fontName, javafx.scene.control.Labeled fxLabeled) {
 		this.fxLabeled = fxLabeled;
 		fxLabeled.setFont(new Font(fontName, 16));
 	}
 
-	Labeled(javafx.scene.control.Labeled fxLabeled) {
+	LabeledFXNode(javafx.scene.control.Labeled fxLabeled) {
 		this.fxLabeled = fxLabeled;
 	}
 
@@ -59,7 +59,7 @@ abstract class Labeled implements ProcessableNode {
 		this.updateBackground();
 	}
 
-	private void updateBackground() {
+	public void updateBackground() {
 		fxLabeled.setBackground(new Background(new BackgroundFill(
 				clearBack ? Color.TRANSPARENT : bgColor,
 				null, null

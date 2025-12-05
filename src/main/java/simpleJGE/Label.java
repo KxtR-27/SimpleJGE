@@ -3,7 +3,7 @@ package simpleJGE;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Label extends Labeled {
+public abstract class Label extends LabeledFXNode {
 	/**
 	 * @return an anonymous {@link Label} subclass that has
 	 * no implementation for {@link #process()}.
