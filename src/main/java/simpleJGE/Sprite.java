@@ -187,13 +187,29 @@ public abstract class Sprite implements ClickableNode {
 	}
 
 	public void setSize(double newW, double newH) {
-		fxPane.setPrefWidth(newW);
-		fxPane.setPrefHeight(newH);
+		fxPane.setPrefSize(newW, newH);
+		fxPane.setMaxSize(fxPane.getPrefWidth(), fxPane.getPrefHeight());
+		fxPane.setMinSize(fxPane.getPrefWidth(), fxPane.getPrefHeight());
+
+		fxPane.getChildren().forEach(node -> {
+			if (node instanceof ImageView imageView) {
+				imageView.setFitWidth(newW);
+				imageView.setFitHeight(newH);
+			}
+		});
 	}
 
 	public void setImage(String imageFilename) {
+		ImageView image = new ImageView(imageFilename);
+		image.setPreserveRatio(true);
+		image.setSmooth(true);
+		image.setFitWidth(fxPane.getPrefWidth());
+		image.setFitHeight(fxPane.getPrefHeight());
+
 		fxPane.getChildren().clear();
-		fxPane.getChildren().add(new ImageView(imageFilename));
+		fxPane.getChildren().add(image);
+
+		fxPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 	}
 
 	public boolean collidesWith(Sprite target) {
