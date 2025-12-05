@@ -1,5 +1,6 @@
 package simpleJGE;
 
+import javafx.scene.Node;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
@@ -8,7 +9,7 @@ import javafx.scene.text.Font;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public class Label {
+public abstract class Label implements ProcessableNode {
     // pygame           <--- simpleGE  ---> javafx
 
     // pygame.font.Font <---   font    ---> javafx.scene.text.Font
@@ -26,6 +27,18 @@ public class Label {
 	private Color bgColor = Color.WHITE;
     private boolean clearBack = false;
 
+	/**
+	 * @return an anonymous {@link Label} subclass that has
+	 * no implementation for {@link #process()}.
+	 * Intended only for basic developmentary tests.
+	 */
+	public static Label newBasicLabel() {
+		return new Label() {
+			@Override
+			public void process() {}
+		};
+	}
+
     public Label(String fontName) {
         this();
         fxLabel.setFont(new Font(fontName, 20));
@@ -34,6 +47,11 @@ public class Label {
     public Label() {
         fxLabel = new javafx.scene.control.Label();
     }
+
+	@Override
+	public Node fxNode() {
+		return this.fxLabel;
+	}
 
 	public void setText(String text) {
 		fxLabel.setText(text);
@@ -68,4 +86,21 @@ public class Label {
                 null, null
         )));
     }
+
+	public void update() {
+		this.process();
+		updateBackground();
+	}
+
+	// checkEvents() is redundant, as JavaFX actively listens for events
+
+	public abstract void process();
+
+	public void hide() {
+		fxLabel.setVisible(false);
+	}
+
+	public void show() {
+		fxLabel.setVisible(true);
+	}
 }

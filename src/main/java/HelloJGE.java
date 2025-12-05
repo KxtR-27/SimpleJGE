@@ -11,7 +11,7 @@ public class HelloJGE extends Application {
     public void start(Stage stage) {
 		simpleJGE.Scene scene = Scene.newBasicScene();
 
-        simpleJGE.Label label = new Label();
+        simpleJGE.Label label = Label.newBasicLabel();
         label.setText("Hello world!");
         label.setFGColor(Color.RED);
         label.setCenter(100, 100);

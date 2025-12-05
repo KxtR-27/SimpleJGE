@@ -18,7 +18,7 @@ import java.util.Set;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Scene {
+public abstract class Scene implements ProcessableScene {
 
 	/** The scene passed to the JavaFX {@link Stage}
 	 * intentionally package-private */
@@ -55,6 +55,11 @@ public abstract class Scene {
 			@Override
 			public void process() {}
 		};
+	}
+
+	@Override
+	public javafx.scene.Scene fxScene() {
+		return fxScene;
 	}
 
 	/**

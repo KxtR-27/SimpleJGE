@@ -2,6 +2,7 @@ package simpleJGE;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -15,10 +16,15 @@ import javafx.scene.shape.Line;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Sprite {
+public abstract class Sprite implements ProcessableNode {
 	// intentionally package-private
 	final Pane fxPane;
 	private final Scene scene;
+
+	@Override
+	public Node fxNode() {
+		return fxPane;
+	}
 
 	public double getX() {return fxPane.getLayoutX();}
 
@@ -41,7 +47,7 @@ public abstract class Sprite {
 	private Point2D previousPoint;
 
 	/**
-	 * @return an anonymous {@link Scene} subclass that has
+	 * @return an anonymous {@link Sprite} subclass that has
 	 * no implementation for {@link #process()}.
 	 * Intended only for basic developmentary tests.
 	 */
@@ -127,7 +133,7 @@ public abstract class Sprite {
 		setY(getY() + dy);
 		checkBounds();
 		// center myself
-		//		checkClicked();
+		// checkClicked();
 		this.process();
 	}
 
