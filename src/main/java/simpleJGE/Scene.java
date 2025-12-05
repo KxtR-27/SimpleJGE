@@ -135,9 +135,17 @@ public abstract class Scene {
 	public void addNodes(Object... nodes) {
 		for (Object nodeObj : nodes) {
 			switch (nodeObj) {
-				case Node node -> this.nodes.add(node);
-				case Sprite sprite -> this.nodes.add(sprite.fxPane);
-				case Label label -> this.nodes.add(label.fxLabel);
+				case Node node -> {
+					if (!this.nodes.contains(node))
+						this.nodes.add(node);
+				}
+				case Sprite sprite -> {
+					if (!this.nodes.contains(sprite.fxPane))
+						this.nodes.add(sprite.fxPane);
+				}
+				case Label label -> {
+					if (!this.nodes.contains(label.fxLabel))
+						this.nodes.add(label.fxLabel);}
 
 				case null, default -> throw new IllegalArgumentException(
 						"Node must be javafx.scene.Node, simpleJGE.Sprite, or simpleJGE.Label."

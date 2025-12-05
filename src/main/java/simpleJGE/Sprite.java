@@ -1,8 +1,11 @@
 package simpleJGE;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -12,30 +15,30 @@ import javafx.scene.shape.Line;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-abstract class Sprite {
+public abstract class Sprite {
 	// intentionally package-private
 	final Pane fxPane;
 	private final Scene scene;
 
-	// shorthand to get pane layout x
-	private double getX() {return fxPane.getLayoutX();}
+	public double getX() {return fxPane.getLayoutX();}
 
-	// shorthand to set pane layout x
-	private void setX(double x) {fxPane.setLayoutX(x);}
+	public void setX(double x) {fxPane.setLayoutX(x);}
 
-	private double getY() {return fxPane.getLayoutY();}
+	public double getY() {return fxPane.getLayoutY();}
 
-	private void setY(double y) {fxPane.setLayoutY(y);}
+	public void setY(double y) {fxPane.setLayoutY(y);}
 
-	private Point2D getPoint() {return new Point2D(getX(), getY());}
+	public Point2D getPoint() {return new Point2D(getX(), getY());}
 
-	private double dx = 0.0, dy = 0.0;    // 2D velocity
-	private double speed = 0.0;            // 2D vel. speed
-	private double moveAngle = 0.0;        // used for movement direction
-	private double imageAngle = 0.0;    // used for pane rotation
+	public void setPoint(Point2D point) {fxPane.relocate(point.getX(), point.getY());}
 
+	protected double dx = 0.0, dy = 0.0;	// 2D velocity direction
+	protected double speed = 0.0;			// 2D velocity speed
+	protected double moveAngle = 0.0;		// used for movement direction
+	protected double imageAngle = 0.0;		// used for pane rotation
+
+	protected BoundaryAction boundaryAction = BoundaryAction.WRAP;
 	private Point2D previousPoint;
-	private BoundaryAction boundaryAction = BoundaryAction.WRAP;
 
 	/**
 	 * @return an anonymous {@link Scene} subclass that has
@@ -43,10 +46,12 @@ abstract class Sprite {
 	 * Intended only for basic developmentary tests.
 	 */
 	public static Sprite newBasicSprite(Scene scene) {
-		return new Sprite(scene) {
+		Sprite sprite = new Sprite(scene) {
 			@Override
 			public void process() {}
 		};
+		sprite.setOnClick(keyEvent -> System.out.printf("I was clicked!%n"));
+		return sprite;
 	}
 
 	Sprite(Scene scene) {
@@ -54,10 +59,7 @@ abstract class Sprite {
 		this.fxPane = new Pane();
 		this.fxPane.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
 		this.setSize(25, 25);
-
 		this.scene = scene;
-		scene.addNode(fxPane);
-
 		this.previousPoint = this.getPoint();
 	}
 
@@ -69,9 +71,9 @@ abstract class Sprite {
 		fxPane.setRotate(fxPane.getRotate() + angleDeg);
 	}
 
-	public void copyImage(String imageFilename) {
+	public void copyImage(Image image) {
 		fxPane.getChildren().clear();
-		fxPane.getChildren().add(new ImageView(imageFilename));
+		fxPane.getChildren().add(new ImageView(image));
 	}
 
 	/** Calculates and sets {@link #dx} and {@link #dy} from {@link #speed} and {@link #moveAngle} */
@@ -115,8 +117,9 @@ abstract class Sprite {
 		dy += ddy;
 	}
 
-
-	// can likely be replaced with an event handler itself | private void checkClicked();
+	public void setOnClick(EventHandler<? super MouseEvent> eventHandler) {
+		fxPane.setOnMouseClicked(eventHandler);
+	}
 
 	public void update() {
 		previousPoint = getPoint();
@@ -179,8 +182,10 @@ abstract class Sprite {
 		fxPane.setPrefHeight(newH);
 	}
 
-	// probably an actual sprite thing
-	//	public void setImage(String imageFilename);
+	public void setImage(String imageFilename) {
+		fxPane.getChildren().clear();
+		fxPane.getChildren().add(new ImageView(imageFilename));
+	}
 
 	public boolean collidesWith(Sprite target) {
 		return fxPane.intersects(target.fxPane.getLayoutBounds());
