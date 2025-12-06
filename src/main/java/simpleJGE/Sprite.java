@@ -1,12 +1,10 @@
 package simpleJGE;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -54,6 +52,7 @@ public class Sprite extends ProcessableNode implements ClickableNode {
 		this.setSize(25, 25);
 		this.scene = scene;
 		this.previousPoint = this.getPoint();
+		this.fxNode().setOnMouseClicked(ignored -> onClick());
 	}
 
 	public void setAngle(double angleDeg) {
@@ -110,19 +109,11 @@ public class Sprite extends ProcessableNode implements ClickableNode {
 		dy += ddy;
 	}
 
-	@Override
-	public void setOnClick(EventHandler<? super MouseEvent> eventHandler) {
-		fxPane.setOnMouseClicked(eventHandler);
-	}
-
 	public void update() {
 		previousPoint = getPoint();
 		setX(getX() + dx);
 		setY(getY() + dy);
 		checkBounds();
-		// center myself
-		// checkClicked();
-		this.process();
 	}
 
 	public void setBoundaryAction(BoundaryAction action) {
@@ -201,7 +192,12 @@ public class Sprite extends ProcessableNode implements ClickableNode {
 		return fxPane.intersects(target.fxPane.getLayoutBounds());
 	}
 
-	public void process() {}
+	public void onClick() {}
+
+	@Override
+	public void process() {
+		update();
+	}
 
 	public void hide() {
 		fxPane.setVisible(false);

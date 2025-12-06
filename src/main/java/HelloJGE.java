@@ -25,8 +25,12 @@ public class HelloJGE extends Application {
 		imageSprite.setSize(10, 10);
 		imageSprite.setPoint(new Point2D(300, 300));
 
-		simpleJGE.Sprite sprite = new Sprite(scene);
-		sprite.setOnClick(event -> imageSprite.setSize(50, 50));
+		simpleJGE.Sprite sprite = new Sprite(scene){
+			@Override
+			public void onClick() {
+				imageSprite.setSize(50, 50);
+			}
+		};
 
 		simpleJGE.TxtInput input = TxtInput.newBasicTxtInput();
 		input.setFGColor(Color.RED);
@@ -54,17 +58,19 @@ public class HelloJGE extends Application {
 		multiLabel.setClearBack(false);
 		multiLabel.setBGColor(Color.CADETBLUE);
 
-		simpleJGE.Button button = new Button();
+		simpleJGE.Button button = new Button(){
+			@Override
+			public void onClick() {
+				input.setClearBack(true);
+				scroller.setClearBack(true);
+				multiLabel.setClearBack(true);
+			}
+		};
 		button.setText("I'm a button!");
 		button.setFGColor(Color.WHITE);
 		button.setCenter(50, 50);
 		button.setBGColor(Color.DARKBLUE);
 		button.setClearBack(false);
-		button.setOnClick(event -> {
-			input.setClearBack(true);
-			scroller.setClearBack(true);
-			multiLabel.setClearBack(true);
-		});
 		button.setFont("Times New Roman");
 
 		// `getResource()` function navigates Gradle structure to the corresponding resources folder

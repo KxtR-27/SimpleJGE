@@ -27,6 +27,7 @@ public class TxtInput extends StyledFXNode implements Valuable<String> {
 
 	public TxtInput() {
 		super(new TextField());
+		fxTextField.setPromptText("Enter text here...");
 	}
 
 	public String getValue() {

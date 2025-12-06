@@ -1,7 +1,5 @@
 package simpleJGE;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import simpleJGE.abstracts.ClickableNode;
 import simpleJGE.abstracts.LabeledFXNode;
 
@@ -11,14 +9,22 @@ import simpleJGE.abstracts.LabeledFXNode;
 public class Button extends LabeledFXNode implements ClickableNode {
 	public Button(String fontName) {
 		super(fontName, new javafx.scene.control.Button());
+		clickableSetup();
 	}
 
 	public Button() {
 		super(new javafx.scene.control.Button());
+		clickableSetup();
 	}
 
+	private void clickableSetup() {
+		this.fxNode().setOnMouseClicked(ignored -> onClick());
+	}
+
+	public void onClick() {}
+
 	@Override
-	public void setOnClick(EventHandler<? super MouseEvent> eventHandler) {
-		fxNode().setOnMouseClicked(eventHandler);
+	public void process() {
+		super.process();
 	}
 }
