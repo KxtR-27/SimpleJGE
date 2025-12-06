@@ -61,12 +61,12 @@ public abstract class LabeledFXNode extends ProcessableNode implements Labeled {
 		)));
 	}
 
-	public void update() {
-		this.process();
-		updateBackground();
-	}
-
 	// checkEvents() is redundant, as JavaFX actively listens for events
 
-	public abstract void process();
+	public void process() {
+		fxLabeled.setBackground(new Background(new BackgroundFill(
+				clearBack ? Color.TRANSPARENT : bgColor,
+				null, null
+		)));
+	}
 }

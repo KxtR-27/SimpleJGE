@@ -7,22 +7,8 @@ import java.util.List;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class MultiLabel extends Label {
+public class MultiLabel extends Label {
 	private final ArrayList<String> lines;
-
-	public static MultiLabel newBasicMultiLabel(List<String> lines) {
-		return new MultiLabel(lines) {
-			@Override
-			public void process() {}
-		};
-	}
-
-	public static MultiLabel newBasicMultiLabel() {
-		return new MultiLabel() {
-			@Override
-			public void process() {}
-		};
-	}
 
 	public MultiLabel(List<String> lines) {
 		this.lines = new ArrayList<>(lines);

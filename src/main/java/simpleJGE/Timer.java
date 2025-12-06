@@ -5,7 +5,7 @@ import simpleJGE.abstracts.Processable;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Timer implements Processable {
+public class Timer implements Processable {
 	private long timeLimitMillis;
 	private long startTimeMillis;
 
@@ -42,7 +42,7 @@ public abstract class Timer implements Processable {
 	}
 
 	@Override
-	public void update() {
+	public void process() {
 		if (getTimeLeft() < 0 && this.running) {
 			this.running = false;
 			onTimeout.run();

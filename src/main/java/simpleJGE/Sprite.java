@@ -18,7 +18,7 @@ import simpleJGE.abstracts.ProcessableNode;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Sprite extends ProcessableNode implements ClickableNode {
+public class Sprite extends ProcessableNode implements ClickableNode {
 	// intentionally package-private
 	private final Pane fxPane;
 	private final Scene scene;
@@ -47,22 +47,7 @@ public abstract class Sprite extends ProcessableNode implements ClickableNode {
 	protected BoundaryAction boundaryAction = BoundaryAction.WRAP;
 	private Point2D previousPoint;
 
-	/**
-	 * @return an anonymous {@link Sprite} subclass that has
-	 * no implementation for {@link #process()}
-	 * and a print statement for {@link #setOnClick(EventHandler)}.
-	 * Intended only for basic developmentary tests.
-	 */
-	public static Sprite newBasicSprite(Scene scene) {
-		Sprite sprite = new Sprite(scene) {
-			@Override
-			public void process() {}
-		};
-		sprite.setOnClick(keyEvent -> System.out.printf("I, a sprite, was clicked!%n"));
-		return sprite;
-	}
-
-	Sprite(Scene scene) {
+	public Sprite(Scene scene) {
 		super();
 		this.fxPane = new Pane();
 		this.fxPane.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
@@ -216,7 +201,7 @@ public abstract class Sprite extends ProcessableNode implements ClickableNode {
 		return fxPane.intersects(target.fxPane.getLayoutBounds());
 	}
 
-	public abstract void process();
+	public void process() {}
 
 	public void hide() {
 		fxPane.setVisible(false);

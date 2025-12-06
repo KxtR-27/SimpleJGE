@@ -1,6 +1,5 @@
 package simpleJGE;
 
-import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -10,9 +9,11 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import simpleJGE.abstracts.Processable;
 import simpleJGE.abstracts.ProcessableNode;
 import simpleJGE.abstracts.ProcessableScene;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,46 +21,21 @@ import java.util.Set;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Scene implements ProcessableScene {
-
+public class Scene implements ProcessableScene {
 	/**
 	 * The scene passed to the JavaFX {@link Stage}
 	 * intentionally package-private
 	 */
 	final javafx.scene.Scene fxScene;
+
 	/** Represents and is bound to the fxScene's root node. */
 	private final Pane screen;
-	/** Represents and is bound to the screen's children. */
-	private final List<Node> nodes;
+
+	/** List of all {@link Processable}s/{@link ProcessableNode}s */
+	private final List<Processable> elements;
+
 	/** A private inner class object that handles pressed keys for the Scene. */
 	private final KeyManager keyManager;
-
-	/**
-	 * @return an anonymous {@link Scene} subclass that has
-	 * no implementation for
-	 * <ul>
-	 * 	    <li>{@link #doEvents(Event)}</li>
-	 * 		<li>{@link #processEvent(Event)}</li>
-	 * 		<li>{@link #update()}</li>
-	 * 		<li>{@link #process()}</li>
-	 * </ul>
-	 * <p>Intended only for basic developmentary tests.</p>
-	 */
-	public static Scene newBasicScene() {
-		return new Scene() {
-			@Override
-			public void doEvents(Event event) {}
-
-			@Override
-			public void processEvent(Event event) {}
-
-			@Override
-			public void update() {}
-
-			@Override
-			public void process() {}
-		};
-	}
 
 	@Override
 	public javafx.scene.Scene fxScene() {
@@ -72,12 +48,10 @@ public abstract class Scene implements ProcessableScene {
 	 */
 	public Scene(double width, double height) {
 		fxScene = new javafx.scene.Scene(new Pane(), width, height);
-
 		screen = (Pane) fxScene.getRoot();
 		fillBackground(Color.WHITE);
 
-		nodes = screen.getChildren();
-
+		elements = new ArrayList<>();
 		keyManager = new KeyManager(this.fxScene);
 	}
 
@@ -135,12 +109,19 @@ public abstract class Scene implements ProcessableScene {
 	}
 
 	/**
-	 * Adds passed nodes to the scene.
+	 * Adds passed elements to the scene.
 	 *
-	 * @param pNodes SimpleJGE {@link ProcessableNode}(s) to add to the scene
+	 * @param elements SimpleJGE {@link Processable}(s) to add to the scene.
+	 * {@link ProcessableNode}s added in this fashion also add their
+	 * {@link ProcessableNode#fxNode()} to the screen.
 	 */
-	public void addNodes(ProcessableNode... pNodes) {
-		List.of(pNodes).forEach(pNode -> this.nodes.add(pNode.fxNode()));
+	public void addElements(Processable... elements) {
+		List.of(elements).forEach(element -> {
+			this.elements.add(element);
+
+			if (element instanceof ProcessableNode)
+				screen.getChildren().add(((ProcessableNode) element).fxNode());
+		});
 	}
 
 	/**
@@ -149,16 +130,18 @@ public abstract class Scene implements ProcessableScene {
 	 * @param fxNodes JavaFX {@link Node}(s) to add to the scene
 	 */
 	public void addNodes(javafx.scene.Node... fxNodes) {
-		this.nodes.addAll(List.of(fxNodes));
+		this.screen.getChildren().addAll(List.of(fxNodes));
 	}
 
 	/**
-	 * Adds a single node to the scene.
+	 * Adds a single element to the scene.
 	 *
-	 * @param pNode SimpleJGE {@link ProcessableNode} to add to the scene
+	 * @param element SimpleJGE {@link ProcessableNode} to add to the scene.
+	 * 	 * {@link ProcessableNode}s added in this fashion also add their
+	 * 	 * {@link ProcessableNode#fxNode()} to the screen.
 	 */
-	public void addNode(ProcessableNode pNode) {
-		addNodes(pNode);
+	public void addElement(Processable element) {
+		addElements(element);
 	}
 
 	/**
@@ -176,16 +159,13 @@ public abstract class Scene implements ProcessableScene {
 	 * @param fxGroup JavaFX {@link Group} of JavaFX {@link Node}(s) to add to the scene.
 	 */
 	public void addGroup(javafx.scene.Group fxGroup) {
-		this.nodes.add(fxGroup);
+		this.screen.getChildren().add(fxGroup);
 	}
 
-	public abstract void doEvents(Event event);
-
-	public abstract void processEvent(Event event);
-
-	public abstract void update();
-
-	public abstract void process();
+	public void process() {
+		for (Processable element : elements)
+			element.process();
+	}
 
 	/**
 	 * Sets the application window title

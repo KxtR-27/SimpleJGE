@@ -12,26 +12,13 @@ import simpleJGE.abstracts.Valuable;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class Scroller extends ProcessableNode implements Labeled, Valuable<Double> {
+public class Scroller extends ProcessableNode implements Labeled, Valuable<Double> {
 	private final javafx.scene.control.Spinner<Double> fxSpinner;
 	private final ScrollerEditor editor;
 
 	private double minValue = -100.0;
 	private double maxValue = 100.0;
 	private double step = 0.01;
-
-	public static Scroller newBasicScroller(double initialValue) {
-		return new Scroller(initialValue) {
-			@Override
-			public void process() {}
-
-			@Override
-			public void update() {}
-		};
-	}
-	public static Scroller newBasicScroller() {
-		return newBasicScroller(0);
-	}
 
 	public Scroller(double initialValue) {
 		fxSpinner = new Spinner<>();
@@ -73,7 +60,7 @@ public abstract class Scroller extends ProcessableNode implements Labeled, Valua
 		));
 	}
 
-	public abstract void process();
+	public void process() {}
 
 	@Override
 	public void setFont(String fontName) {
@@ -102,14 +89,12 @@ public abstract class Scroller extends ProcessableNode implements Labeled, Valua
 
 	@Override
 	public void updateBackground() {
-		update();
+
 	}
 
 	public Node fxNode() {
 		return fxSpinner;
 	}
-
-	public abstract void update();
 
 	private static class ScrollerEditor extends StyledFXNode {
 		public ScrollerEditor(Node node) {

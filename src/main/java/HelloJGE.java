@@ -10,9 +10,9 @@ import java.util.Objects;
 public class HelloJGE extends Application {
     @Override
     public void start(Stage stage) {
-		simpleJGE.Scene scene = Scene.newBasicScene();
+		simpleJGE.Scene scene = new Scene();
 
-        simpleJGE.Label label = Label.newBasicLabel();
+        simpleJGE.Label label = new Label();
         label.setText("I'm a label!");
         label.setFGColor(Color.RED);
         label.setCenter(100, 100);
@@ -20,12 +20,12 @@ public class HelloJGE extends Application {
 		label.setClearBack(true);
 		label.setFont("Times New Roman");
 
-		simpleJGE.Sprite imageSprite = Sprite.newBasicSprite(scene);
+		simpleJGE.Sprite imageSprite = new Sprite(scene);
 		imageSprite.setImage(helpGetResource("catppuccin.png"));
 		imageSprite.setSize(10, 10);
 		imageSprite.setPoint(new Point2D(300, 300));
 
-		simpleJGE.Sprite sprite = Sprite.newBasicSprite(scene);
+		simpleJGE.Sprite sprite = new Sprite(scene);
 		sprite.setOnClick(event -> imageSprite.setSize(50, 50));
 
 		simpleJGE.TxtInput input = TxtInput.newBasicTxtInput();
@@ -35,14 +35,14 @@ public class HelloJGE extends Application {
 		input.setCenter(300, 300);
 		input.setFont("Times New Roman");
 
-		simpleJGE.Scroller scroller = Scroller.newBasicScroller();
+		simpleJGE.Scroller scroller = new Scroller();
 //		scroller.setStep(0.5);
 		scroller.setValue(-5.0);
 		scroller.setFGColor(Color.CORNFLOWERBLUE);
 		scroller.setBGColor(Color.CHARTREUSE);
 		scroller.setFont("Times New Roman");
 
-		simpleJGE.MultiLabel multiLabel = MultiLabel.newBasicMultiLabel(List.of(
+		simpleJGE.MultiLabel multiLabel = new MultiLabel(List.of(
 				"I have many lines",
 				"and I must share them all",
 				"something, something...uhh..",
@@ -54,7 +54,7 @@ public class HelloJGE extends Application {
 		multiLabel.setClearBack(false);
 		multiLabel.setBGColor(Color.CADETBLUE);
 
-		simpleJGE.Button button = Button.newBasicButton();
+		simpleJGE.Button button = new Button();
 		button.setText("I'm a button!");
 		button.setFGColor(Color.WHITE);
 		button.setCenter(50, 50);
@@ -74,7 +74,7 @@ public class HelloJGE extends Application {
 		// but it explicitly specifies which "Scene" to use here.
 		// Readability is key ✨
 		scene.setImage(bgImage);
-		scene.addNodes(label, sprite, imageSprite, button, input, scroller, multiLabel);
+		scene.addElements(label, sprite, imageSprite, button, input, scroller, multiLabel);
 		scene.setCaption(stage, "test");
 
         stage.setScene(scene.forStage());

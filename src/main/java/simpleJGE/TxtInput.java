@@ -15,7 +15,7 @@ import simpleJGE.abstracts.Valuable;
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
-public abstract class TxtInput extends StyledFXNode implements Valuable<String> {
+public class TxtInput extends StyledFXNode implements Valuable<String> {
 	private final TextField fxTextField = (TextField) fxNode();
 
 	public static TxtInput newBasicTxtInput() {

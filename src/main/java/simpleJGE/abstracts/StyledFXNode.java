@@ -56,12 +56,14 @@ public abstract class StyledFXNode extends ProcessableNode implements Labeled {
 		return fxNode;
 	}
 
-	@Override
 	public void update() {
 		String actualBGColor = clearBack ? "-fx-background-color: none;" : bgColor;
 		fxNode.setStyle(String.format("%s%s%s%s", fontName, fontSize, fgColor, actualBGColor));
 	}
 
 	@Override
-	public abstract void process();
+	public void process() {
+		String actualBGColor = clearBack ? "-fx-background-color: none;" : bgColor;
+		fxNode.setStyle(String.format("%s%s%s%s", fontName, fontSize, fgColor, actualBGColor));
+	}
 }
