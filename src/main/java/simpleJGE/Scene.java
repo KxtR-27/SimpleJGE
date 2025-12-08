@@ -1,5 +1,7 @@
 package simpleJGE;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -9,19 +11,19 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import simpleJGE.abstracts.Processable;
 import simpleJGE.abstracts.ProcessableNode;
 import simpleJGE.abstracts.ProcessableScene;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("unused")
 // usage depends upon user implementation
 
 public class Scene implements ProcessableScene {
+	private static final int REFRESH_RATE = 30;
+
 	/**
 	 * The scene passed to the JavaFX {@link Stage}
 	 * intentionally package-private
@@ -53,6 +55,13 @@ public class Scene implements ProcessableScene {
 
 		elements = new ArrayList<>();
 		keyManager = new KeyManager(this.fxScene);
+
+		Timeline processTimeline = new Timeline(new KeyFrame(
+				Duration.seconds(1.0 / REFRESH_RATE),
+				ignored -> this.process()
+		));
+		processTimeline.setCycleCount(Timeline.INDEFINITE);
+		processTimeline.play();
 	}
 
 	/**

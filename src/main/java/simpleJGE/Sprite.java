@@ -109,13 +109,6 @@ public class Sprite extends ProcessableNode implements ClickableNode {
 		dy += ddy;
 	}
 
-	public void update() {
-		previousPoint = getPoint();
-		setX(getX() + dx);
-		setY(getY() + dy);
-		checkBounds();
-	}
-
 	public void setBoundaryAction(BoundaryAction action) {
 		boundaryAction = action;
 	}
@@ -196,7 +189,10 @@ public class Sprite extends ProcessableNode implements ClickableNode {
 
 	@Override
 	public void process() {
-		update();
+		previousPoint = getPoint();
+		setX(getX() + dx);
+		setY(getY() + dy);
+		checkBounds();
 	}
 
 	public void hide() {
@@ -234,6 +230,10 @@ public class Sprite extends ProcessableNode implements ClickableNode {
 
 	public void drawTrace() {
 		drawTrace(Color.BLACK);
+	}
+
+	public void setDX(double speed) {
+		this.dx = speed;
 	}
 
 	public enum BoundaryAction {

@@ -31,6 +31,8 @@ public class HelloJGE extends Application {
 				imageSprite.setSize(50, 50);
 			}
 		};
+		sprite.setDX(5);
+		sprite.setPoint(new Point2D(200, 200));
 
 		simpleJGE.TxtInput input = TxtInput.newBasicTxtInput();
 		input.setFGColor(Color.RED);
@@ -85,8 +87,6 @@ public class HelloJGE extends Application {
 
         stage.setScene(scene.forStage());
         stage.show();
-
-		sprite.setPoint(new Point2D(200, 200));
     }
 
 	private static String helpGetResource(String filename) {
